@@ -107,10 +107,42 @@ class LinkController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     */
+    public function delete(string $shortcode)
+    {
+        $link = Link::where('shortcode', $shortcode)->first();
+
+        if($link == null) {
+            return Redirect::route('link.list')->with('status', 'no-such-link');
+        }
+
+        if($link->user->id != Auth::user()->id) {
+            return Redirect::route('link.list')->with('status', 'not-authorized');
+        }
+
+        return view('link.delete', [
+            'link' => $link,
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $shortcode)
     {
-        //
+        $link = Link::where('shortcode', $shortcode)->first();
+
+        if($link == null) {
+            return Redirect::route('link.list')->with('status', 'no-such-link');
+        }
+
+        if($link->user->id != Auth::user()->id) {
+            return Redirect::route('link.list')->with('status', 'not-authorized');
+        }
+
+        $link->delete();
+
+        return Redirect::route('link.list')->with('status', 'link-deleted');
     }
 }
