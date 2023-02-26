@@ -24,7 +24,10 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/links', [LinkController::class, 'index'])->middleware(['auth'])->name('link.list');
-Route::get('/links/{link}/edit', [LinkController::class, 'edit'])->middleware(['auth'])->name('link.edit');
+Route::get('/links/{shortcode}/edit', [LinkController::class, 'edit'])->middleware(['auth'])->name('link.edit');
+Route::get('/links/new', [LinkController::class, 'create'])->middleware(['auth'])->name('link.create');
+Route::patch('/links/{shortcode}', [LinkController::class, 'update'])->middleware(['auth'])->name('link.update');
+Route::post('/links', [LinkController::class, 'store'])->middleware(['auth'])->name('link.store');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

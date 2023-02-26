@@ -7,6 +7,19 @@
 
     <div class="py-12">
         <div class="mx-auto max-w-7xl">
+           @if (session('status') == "not-authorized")
+           <p x-data="{show: true}" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" class="text-lg text-red-600">
+                {{ __('You do not own that link.') }}
+           </p>
+           @elseif (session('status') == 'no-such-link')
+           <p x-data="{show: true}" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" class="text-lg text-red-600">
+                {{ __('No link with the specified shortcode exists.') }}
+           </p>
+           @elseif (session('status') == 'link-created')
+           <p x-data="{show: true}" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" class="text-lg text-green-600">
+                {{ __('New link created.') }}
+           </p>
+           @endif
             <div class="bg-white shadow-sm sm:rounded-lg">
                 <div class="p-4">
                     <table class="w-full border-collapse">
@@ -22,7 +35,7 @@
                                 <td>{{ $link->shortcode }}</td>
                                 <td>{{ $link->url }}</td>
                                 <td class="pr-4">
-                                    <a href="{{ route('link.edit', ['link' => $link->shortcode]) }}">
+                                    <a href="{{ route('link.edit', ['shortcode' => $link->shortcode]) }}">
                                         <div class="text-white text-center p-2 rounded bg-gray-800">Edit</div>
                                     </a>
                                 </td>
