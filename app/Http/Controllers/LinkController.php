@@ -19,11 +19,10 @@ class LinkController extends Controller
      */
     public function index(Request $request) : View
     {
-        $user = User::withCount('links')->find($request->user())->first();
+        $links = Link::withCount('visits')->where('user_id', $request->user()->id)->get();
 
         return view('link.list', [
-            'links' => $user->links,
-            'count' => $user->links_count,
+            'links' => $links,
         ]);
     }
 

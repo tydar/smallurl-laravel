@@ -29,8 +29,9 @@
                     <table class="w-full border-collapse">
                         <thead class="font-semibold text-xl">
                             <tr>
-                                <td>Shortcode</td>
-                                <td>URL</td>
+                                <td>{{ __('Shortcode') }}</td>
+                                <td>{{ __('URL') }}</td>
+                                <td>{{ __('Visit Count') }}</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,10 +39,11 @@
                             <tr class="max-h-4">
                                 <td>{{ $link->shortcode }}</td>
                                 <td>{{ $link->url }}</td>
+                                <td>{{ $link->visits_count }}</td>
                                 <td class="pr-4">
-                                    <a href="{{ route('link.edit', ['shortcode' => $link->shortcode]) }}">
-                                        <div class="text-white text-center p-2 rounded bg-gray-800">Edit</div>
-                                    </a>
+                                    <form method="get" action="{{ route('link.edit', ['shortcode' => $link->shortcode]) }}">
+                                        <x-primary-button>{{ __('Edit') }}</x-primary-button>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach
