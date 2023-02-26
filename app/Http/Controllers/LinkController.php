@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\User;
 use App\Models\Link;
+use App\Models\Visit;
 
 class LinkController extends Controller
 {
@@ -55,7 +58,7 @@ class LinkController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $shortcode)
+    public function show(Request $request, string $shortcode)
     {
         $link = Link::where('shortcode', $shortcode)->first();
 
@@ -63,7 +66,17 @@ class LinkController extends Controller
             return Redirect::route('link.missing');
         }
 
-        // TODO: track visit
+        $ip_validator = Validator::make(['ip' => $request->ip()], [
+            'ip' => 'required|ipv4',
+        ]);
+
+        if(!$ip_validator->fails()) {
+            $visit = new Visit;
+            $visit->link_id = $link->id;
+            $visit->ip = $request->ip();
+            $visit->save();
+        } else {
+        }
 
         return Redirect::away($link->url);
     }
