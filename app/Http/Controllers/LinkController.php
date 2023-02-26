@@ -61,7 +61,7 @@ class LinkController extends Controller
         $link = Link::where('shortcode', $shortcode)->first();
 
         if($link == null) {
-            return Redirect::route('link.missing');
+            abort(404);
         }
 
         $ip_validator = Validator::make(['ip' => $request->ip()], [
