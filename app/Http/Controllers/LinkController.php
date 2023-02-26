@@ -55,9 +55,17 @@ class LinkController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $shortcode)
     {
-        //
+        $link = Link::where('shortcode', $shortcode)->first();
+
+        if($link == null) {
+            return Redirect::route('link.missing');
+        }
+
+        // TODO: track visit
+
+        return Redirect::away($link->url);
     }
 
     /**
