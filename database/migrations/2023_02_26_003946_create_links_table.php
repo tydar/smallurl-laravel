@@ -14,14 +14,15 @@ return new class extends Migration
         Schema::create('links', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-	    $table->string('url');
-	    $table->string('shortcode');
-	    $table->unsignedBigInteger('user_id');
+            $table->string('url');
+            $table->string('shortcode');
 
-	    // Access patterns will be primarily:
-	    // * Get one link by shortcode
-	    // * Get all links by user_id
-	    $table->index(['shortcode', 'user_id']);
+            $table->foreignId('user_id')->constrained();
+
+            // Access patterns will be primarily:
+            // * Get one link by shortcode
+            // * Get all links by user_id
+            $table->index(['shortcode', 'user_id']);
         });
     }
 

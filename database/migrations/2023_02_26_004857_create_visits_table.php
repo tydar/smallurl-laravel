@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('visits', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-	    $table->string('ip');
-	    $table->unsignedBigInteger('link_id');
+            $table->string('ip');
 
-	    // access pattern will primarily be: get all visits by link_id
-	    $table->index('link_id');
+            $table->foreignId('link_id')->constrained();
+
+            // access pattern will primarily be: get all visits by link_id
+            $table->index('link_id');
         });
     }
 
