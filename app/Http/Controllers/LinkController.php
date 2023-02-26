@@ -74,7 +74,6 @@ class LinkController extends Controller
             $visit->link_id = $link->id;
             $visit->ip = $request->ip();
             $visit->save();
-        } else {
         }
 
         return Redirect::away($link->url);
@@ -87,6 +86,7 @@ class LinkController extends Controller
     {
         $link = Link::where('shortcode', $shortcode)->first();
 
+        // TODO: wrap the following two conditionals in a middleware?
         if($link == null) {
             return Redirect::route('link.list')->with('status', 'no-such-link');
         }

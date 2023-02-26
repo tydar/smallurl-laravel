@@ -23,6 +23,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// TODO: use resourceful routing to consolidate this
 Route::get('/links', [LinkController::class, 'index'])->middleware(['auth'])->name('link.list');
 Route::get('/links/{shortcode}/edit', [LinkController::class, 'edit'])->middleware(['auth'])->name('link.edit');
 Route::get('/links/new', [LinkController::class, 'create'])->middleware(['auth'])->name('link.create');
