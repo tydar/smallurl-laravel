@@ -83,7 +83,7 @@ class LinkController extends Controller
      */
     public function edit(string $shortcode)
     {
-        $link = Link::where('shortcode', $shortcode)->first();
+        $link = Link::withCount('visits')->where('shortcode', $shortcode)->first();
 
         // TODO: wrap the following two conditionals in a middleware?
         if($link == null) {
@@ -96,6 +96,7 @@ class LinkController extends Controller
 
         return view('link.edit', [
             'link' => $link,
+            'recent_visits'  => $link->visits->sortByDesc('created_at')->take(5),
         ]);
     }
 

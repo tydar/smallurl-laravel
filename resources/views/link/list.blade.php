@@ -36,9 +36,15 @@
                         </thead>
                         <tbody>
                             @foreach ($links as $link)
-                            <tr class="max-h-4">
-                                <td>{{ $link->shortcode }}</td>
-                                <td>{{ $link->url }}</td>
+                            <tr>
+                            <td>
+                                <div class="max-h-4 overflow-hidden">
+                                    <a href="{{ route('link.show', ['shortcode' => $link->shortcode]) }}">
+                                        {{ $link->shortcode }}
+                                    </a>
+                                </div>
+                            </td>
+                                <td><div class="max-h-6 h-6 truncate overflow-hidden">{{ $link->url }}</div></td>
                                 <td>{{ $link->visits_count }}</td>
                                 <td class="pr-4">
                                     <form method="get" action="{{ route('link.edit', ['shortcode' => $link->shortcode]) }}">
