@@ -24,14 +24,16 @@
                             </h2>
                         </hgroup>
 
-                        <p class="mt-4 mb-4 text-sm text-gray-600">
-                            {{ __("Most recent five visits.") }}
-                        </p>
                         <table class="w-full border-collapse">
                             <thead class="font-semibold text-md">
                                 <tr>
                                     <td>{{ __('Visit Time') }}</td>
                                     <td>{{ __('IP Address') }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-light mt-4 text-sm text-gray-600">
+                                        {{ __("Most recent five visitors.") }}
+                                    </td>
                                 </tr>
                             </thead>
                             <tbody>

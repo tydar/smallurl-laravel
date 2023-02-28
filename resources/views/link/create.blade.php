@@ -17,13 +17,13 @@
 
                        <div>
                            <x-input-label for="shortcode" :value="__('Shortcode')" />
-                           <x-text-input id="shortcode" type="text" name="shortcode" class="mt-1 block w-full" :value="old('shortcode', __('Shortcode') . '...')" required autofocus />
+                           <x-text-input id="shortcode" type="text" name="shortcode" class="mt-1 block w-full" :value="old('shortcode')" required autofocus />
                            <x-input-error class="mt-2" :messages="$errors->get('shortcode')" />
                        </div>
 
                        <div>
                            <x-input-label for="url" :value="__('URL')" />
-                           <x-text-input id="url" type="text" name="url" class="mt-1 block w-full" :value="old('url', __('URL') . '...')" required />
+                           <x-text-input id="url" type="text" name="url" class="mt-1 block w-full" :value="old('url')" required />
                            <x-input-error class="mt-2" :messages="$errors->get('url')" />
                        </div>
 
