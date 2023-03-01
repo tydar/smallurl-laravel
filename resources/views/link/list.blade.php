@@ -29,19 +29,27 @@
                     <table class="w-full border-collapse">
                         <thead class="font-semibold text-xl">
                             <tr>
-                                <td>Shortcode</td>
-                                <td>URL</td>
+                                <td>{{ __('Shortcode') }}</td>
+                                <td>{{ __('URL') }}</td>
+                                <td>{{ __('Visit Count') }}</td>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($links as $link)
-                            <tr class="max-h-4">
-                                <td>{{ $link->shortcode }}</td>
-                                <td>{{ $link->url }}</td>
-                                <td class="pr-4">
-                                    <a href="{{ route('link.edit', ['shortcode' => $link->shortcode]) }}">
-                                        <div class="text-white text-center p-2 rounded bg-gray-800">Edit</div>
+                            <tr>
+                            <td>
+                                <div class="max-h-4 overflow-hidden">
+                                    <a href="{{ route('link.show', ['shortcode' => $link->shortcode]) }}">
+                                        {{ $link->shortcode }}
                                     </a>
+                                </div>
+                            </td>
+                                <td><div class="max-h-6 h-6 truncate overflow-hidden">{{ $link->url }}</div></td>
+                                <td>{{ $link->visits_count }}</td>
+                                <td class="pr-4">
+                                    <form method="get" action="{{ route('link.edit', ['shortcode' => $link->shortcode]) }}">
+                                        <x-primary-button>{{ __('Edit') }}</x-primary-button>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach

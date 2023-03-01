@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 use App\Models\User;
 use App\Models\Link;
+use App\Models\Visit;
 
 class LinkController extends Controller
 {
@@ -17,11 +19,10 @@ class LinkController extends Controller
      */
     public function index(Request $request) : View
     {
-        $user = User::withCount('links')->find($request->user())->first();
+        $links = Link::withCount('visits')->where('user_id', $request->user()->id)->get();
 
         return view('link.list', [
-            'links' => $user->links,
-            'count' => $user->links_count,
+            'links' => $links,
         ]);
     }
 
@@ -55,9 +56,26 @@ class LinkController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $shortcode)
     {
-        //
+        $link = Link::where('shortcode', $shortcode)->first();
+
+        if($link == null) {
+            abort(404);
+        }
+
+        $ip_validator = Validator::make(['ip' => $request->ip()], [
+            'ip' => 'required|ipv4',
+        ]);
+
+        if(!$ip_validator->fails()) {
+            $visit = new Visit;
+            $visit->link_id = $link->id;
+            $visit->ip = $request->ip();
+            $visit->save();
+        }
+
+        return Redirect::away($link->url);
     }
 
     /**
@@ -65,8 +83,9 @@ class LinkController extends Controller
      */
     public function edit(string $shortcode)
     {
-        $link = Link::where('shortcode', $shortcode)->first();
+        $link = Link::withCount('visits')->where('shortcode', $shortcode)->first();
 
+        // TODO: wrap the following two conditionals in a middleware?
         if($link == null) {
             return Redirect::route('link.list')->with('status', 'no-such-link');
         }
@@ -77,6 +96,7 @@ class LinkController extends Controller
 
         return view('link.edit', [
             'link' => $link,
+            'recent_visits'  => $link->visits->sortByDesc('created_at')->take(5),
         ]);
     }
 
