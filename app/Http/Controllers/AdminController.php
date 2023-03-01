@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -11,7 +13,11 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.show');
+        $users = User::paginate(15);
+
+        return view('admin.show', [
+            'users' => $users,
+        ]);
     }
 
     /**
@@ -44,6 +50,22 @@ class AdminController extends Controller
     public function edit(string $id)
     {
         //
+    }
+
+    /**
+     * Show the admin form for editing a user.
+     */
+    public function user_edit(string $id)
+    {
+        $user = User::find($id);
+
+        if(!$user) {
+            return view('admin.show')->with('status', 'no-such-user');
+        }
+
+        return view('admin.user', [
+            'user' => $user,
+        ]);
     }
 
     /**

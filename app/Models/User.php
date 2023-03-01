@@ -13,7 +13,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    public function links() : HasMany
+    public function shortlinks() : HasMany
     {
 	    return $this->hasMany(Link::class);
     }

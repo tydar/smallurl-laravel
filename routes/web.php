@@ -36,7 +36,10 @@ Route::patch('/links/{shortcode}', [LinkController::class, 'update'])->middlewar
 Route::post('/links', [LinkController::class, 'store'])->middleware(['auth'])->name('link.store');
 Route::delete('/links/{shortcode}', [LinkController::class, 'destroy'])->middleware(['auth'])->name('link.destroy');
 
-Route::get('/admin', [AdminController::class, 'index'])->middleware(['auth', 'superuser'])->name('admin.show');
+Route::middleware(['auth', 'superuser'])->group(function() {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.show');
+    Route::get('/admin/user/{id}', [AdminController::class, 'user_edit'])->name('admin.user');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
