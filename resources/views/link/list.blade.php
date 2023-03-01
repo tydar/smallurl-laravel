@@ -23,6 +23,10 @@
            <p x-data="{show: true}" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" class="text-lg text-green-600">
                 {{ __('Link deleted.') }}
            </p>
+           @elseif (session('status') == 'not-admin')
+           <p x-data="{show: true}" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" class="text-lg text-red-600">
+                {{ __('You are not a superuser.') }}
+           </p>
            @endif
             <div class="bg-white shadow-sm sm:rounded-lg">
                 <div class="p-4">

@@ -18,6 +18,11 @@
                     <x-nav-link :href="route('link.create')" :active="request()->routeIs('link.create')">
                         {{ __('New Link') }}
                     </x-nav-link>
+                    @if (request()->user()->superuser)
+                    <x-nav-link :href="route('admin.show')" :active="request()->routeIs('admin.show')" class="text-red-600">
+                        {{ __('Admin') }}
+                    </x-nav-link>
+                    @endif
                 </div>
             </div>
 
