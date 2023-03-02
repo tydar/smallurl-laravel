@@ -9,7 +9,48 @@
         <div class="mx-auto max-w-7xl">
             <div class="bg-white shadow-sm sm:rounded-lg">
                 <div class="p-4">
-                    <h3>Users</h3>
+                    <h3 class="font-semibold text-lg">{{ __('Registration Codes') }}</h3>
+                    <table class="w-full border-collapse">
+                        <thead class="font-semibold text-md">
+                            <tr>
+                                <td>{{ __('ID') }}</td>
+                                <td>{{ __('Code') }}</td>
+                                <td>{{ __('Redemption Count') }}</td>
+                                <td>{{ __('Max Redemptions') }}</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($codes as $code)
+                            <tr>
+                                <td>
+                                    {{ $code->id }}
+                                </td>
+                                <td>
+                                    {{ $code->code }}
+                                </td>
+                                <td>
+                                    {{ $code->redemption_count }}
+                                </td>
+                                <td>
+                                    {{ $code->max_redemptions }}
+                                </td>
+                                <td class="pr-4">
+                                    <form method="get" action="{{ route('admin.registration_code', ['id' => $code->id]) }}">
+                                        <x-primary-button>{{ __('Edit') }}</x-primary-button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class='px-4'>
+                    {{ $codes->links() }}
+                </div>
+            </div>
+            <div class="bg-white shadow-sm sm:rounded-lg">
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg">{{ __('Users') }}</h3>
                     <table class="w-full border-collapse">
                         <thead class="font-semibold text-md">
                             <tr>

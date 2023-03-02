@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\RegistrationCode;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class AdminController extends Controller
 {
@@ -14,9 +16,11 @@ class AdminController extends Controller
     public function index()
     {
         $users = User::paginate(15);
+        $codes = RegistrationCode::paginate(15);
 
         return view('admin.show', [
             'users' => $users,
+            'codes' => $codes,
         ]);
     }
 
@@ -69,11 +73,57 @@ class AdminController extends Controller
     }
 
     /**
+     * Show the admin form for editing a registration code.
+     */
+    public function code_edit(string $id)
+    {
+        $code = RegistrationCode::find($id);
+
+        if(!$code) {
+            return view('admin.show')->with('status', 'no-such-registration-code');
+        }
+
+        return view('admin.registration_code', [
+            'code' => $code,
+        ]);
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
         //
+    }
+
+    public function code_update(Request $request, string $id)
+    {
+        $validated = $request->validate([
+            'code' => 'required|alpha_num|max:30|min:5',
+            'redemption_count' => 'required|integer|min:0',
+            'max_redemptions' =>  'required|integer|min:0|max:100',
+        ]);
+
+        $code = RegistrationCode::find($id);
+        if(!$code) {
+            return view('admin.show')->with('status', 'no-such-registration-code');
+        }
+
+        if($code->code != $validated['code']) {
+            $other_codes = RegistrationCode::where('code', $validated['code'])->get()->isEmpty();
+            if(!$other_codes) {
+                return Redirect::route('admin.registration_code', ['id' => $code->id])->withErrors([
+                    'code' => 'This code is already in use.',
+                ]);
+            }
+        }
+
+        $code->code = $validated['code'];
+        $code->redemption_count = $validated['redemption_count'];
+        $code->max_redemptions = $validated['max_redemptions'];
+        $code->save();
+
+        return Redirect::route('admin.registration_code', ['id' => $code->id])->with('status', 'code-updated');
     }
 
     /**
