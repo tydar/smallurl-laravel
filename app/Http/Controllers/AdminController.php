@@ -32,6 +32,30 @@ class AdminController extends Controller
         //
     }
 
+    public function code_create()
+    {
+        return view('admin.code_create', [
+            'code' => null,
+        ]);
+    }
+
+    public function code_store(Request $request)
+    {
+        $validated = $request->validate([
+            'code' => 'required|alpha_num|max:30|min:5|unique:registration_codes',
+            'max_redemptions' =>  'required|integer|min:0|max:100',
+        ]);
+
+        $code = new RegistrationCode;
+        $code->code = $validated['code'];
+        $code->redemption_count = 0;
+        $code->max_redemptions = $validated['max_redemptions'];
+
+        $code->save();
+
+        return Redirect::route('admin.show')->with('status', 'code-created');
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -83,7 +107,7 @@ class AdminController extends Controller
             return view('admin.show')->with('status', 'no-such-registration-code');
         }
 
-        return view('admin.registration_code', [
+        return view('admin.code_edit', [
             'code' => $code,
         ]);
     }
@@ -112,7 +136,7 @@ class AdminController extends Controller
         if($code->code != $validated['code']) {
             $other_codes = RegistrationCode::where('code', $validated['code'])->get()->isEmpty();
             if(!$other_codes) {
-                return Redirect::route('admin.registration_code', ['id' => $code->id])->withErrors([
+                return Redirect::route('admin.code_edit', ['id' => $code->id])->withErrors([
                     'code' => 'This code is already in use.',
                 ]);
             }
@@ -123,7 +147,7 @@ class AdminController extends Controller
         $code->max_redemptions = $validated['max_redemptions'];
         $code->save();
 
-        return Redirect::route('admin.registration_code', ['id' => $code->id])->with('status', 'code-updated');
+        return Redirect::route('admin.code_edit', ['id' => $code->id])->with('status', 'code-updated');
     }
 
     /**

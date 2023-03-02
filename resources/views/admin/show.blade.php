@@ -9,7 +9,12 @@
         <div class="mx-auto max-w-7xl">
             <div class="bg-white shadow-sm sm:rounded-lg">
                 <div class="p-4">
-                    <h3 class="font-semibold text-lg">{{ __('Registration Codes') }}</h3>
+                    <div class="flex">
+                        <h3 class="font-semibold text-lg mr-1">{{ __('Registration Codes') }}</h3>
+                        <form class="ml-1" method="get" action="{{ route('admin.code_create') }}">
+                            <x-primary-button>{{ __('New Code') }}</x-primary-button>
+                        </form>
+                    </div>
                     <table class="w-full border-collapse">
                         <thead class="font-semibold text-md">
                             <tr>
@@ -35,7 +40,7 @@
                                     {{ $code->max_redemptions }}
                                 </td>
                                 <td class="pr-4">
-                                    <form method="get" action="{{ route('admin.registration_code', ['id' => $code->id]) }}">
+                                    <form method="get" action="{{ route('admin.code_edit', ['id' => $code->id]) }}">
                                         <x-primary-button>{{ __('Edit') }}</x-primary-button>
                                     </form>
                                 </td>
