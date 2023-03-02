@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LinkController;
+use App\Http\Controllers\AdminController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +35,15 @@ Route::get('/l/{shortcode}', [LinkController::class, 'show'])->name('link.show')
 Route::patch('/links/{shortcode}', [LinkController::class, 'update'])->middleware(['auth'])->name('link.update');
 Route::post('/links', [LinkController::class, 'store'])->middleware(['auth'])->name('link.store');
 Route::delete('/links/{shortcode}', [LinkController::class, 'destroy'])->middleware(['auth'])->name('link.destroy');
+
+Route::middleware(['auth', 'superuser'])->group(function() {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.show');
+    Route::get('/admin/user/{id}', [AdminController::class, 'user_edit'])->name('admin.user');
+    Route::get('/admin/code/{id}', [AdminController::class, 'code_edit'])->name('admin.code_edit');
+    Route::patch('/admin/code/{id}', [AdminController::class, 'code_update'])->name('admin.code_update');
+    Route::get('/admin/code', [AdminController::class, 'code_create'])->name('admin.code_create');
+    Route::post('/admin/code', [AdminController::class, 'code_store'])->name('admin.code_store');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
