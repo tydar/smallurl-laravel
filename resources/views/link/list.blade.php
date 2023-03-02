@@ -42,7 +42,7 @@
                             @foreach ($links as $link)
                             <tr>
                             <td>
-                                <div class="max-h-4 overflow-hidden">
+                                <div class="max-h-6 overflow-hidden">
                                     <a href="{{ route('link.show', ['shortcode' => $link->shortcode]) }}">
                                         {{ $link->shortcode }}
                                     </a>

@@ -17,9 +17,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Homepage is list of links
+Route::get('/', [LinkController::class, 'index'])->middleware(['auth']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
